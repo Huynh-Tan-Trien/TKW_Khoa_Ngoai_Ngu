@@ -1,0 +1,21 @@
+@import './base.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+#app {
+  max-width: 100vw;
+  margin: 0 auto;
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 5px;
+}
+
+.bg-gradient-custom {
+  background: linear-gradient(to right, #cceaff, #85e3f8, #2fc9f0); /* Một gradient ba màu */
+}
