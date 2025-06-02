@@ -19,34 +19,53 @@ const roleLabel = {
 };
 
 const handleSubmit = async () => {
-  // Tìm người dùng theo email và password
-  const { data: users, error } = await supabase
-    .from('User') 
-    .select('email, password, role')
-    .eq('email', email.value)
-    .eq('password', password.value); 
+  const inputEmail = email.value.trim();
+  const inputPassword = password.value.trim();
+  let user = null;
+  let role = null;
+  let error = null;
 
-  if (error || !users || users.length === 0) {
+  // 1. Kiểm tra trong bảng students
+  const { data: studentData, error: studentError } = await supabase
+    .from('students')
+    .select('id, mssv, email, name, role')
+    .eq('email', inputEmail)
+    .eq('password', inputPassword) 
+    .single();
+
+  if (studentData && !studentError) {
+    user = studentData;
+    role = 'Sinh viên';
+  } else {
+    // 2. Kiểm tra trong bảng teachers
+    const { data: teacherData, error: teacherError } = await supabase
+      .from('teachers')
+      .select('id, msgv, email, name, role')
+      .eq('email', inputEmail)
+      .eq('password', inputPassword)
+      .single();
+
+    if (teacherData && !teacherError) {
+      user = teacherData;
+      role = teacherData.role === 'admin' ? 'Admin' : 'Giảng viên';
+    } else {
+      // Không tìm thấy trong bảng → lỗi
+      error = studentError || teacherError || new Error('Không tìm thấy người dùng');
+    }
+  }
+
+  if (!user || error) {
     alert('Email hoặc mật khẩu không đúng!');
     return;
   }
 
-  const user = users[0];
-
-  // Lưu vào store
-  userStore.setUser(user.email, user.role);
-
-  alert(`Đăng nhập thành công với vai trò ${roleLabel[user.role] || user.role}!`);
+  userStore.setUser(user.mssv || user.msgv,user.email, user.name, role);
+  
+  alert(`Đăng nhập thành công với vai trò ${roleLabel[role] || role}!`);
   emit('close');
-
-  // Điều hướng
-  if(user.role) {
-    router.push('/');
-  }
+  router.push('/');
 };
 </script>
-
-
 
 <template>
   <div class="modal">
@@ -55,8 +74,8 @@ const handleSubmit = async () => {
       <button class="close-btn" @click="emit('close')">X</button>
       <h2>Đăng nhập</h2>
       <form @submit.prevent="handleSubmit">
-        <input v-model="email" type="email" placeholder="Email" required />
-        <input v-model="password" type="password" placeholder="Mật khẩu" required />
+        <input v-model="email" type="email" placeholder="Email" autocomplete="username" required />
+        <input v-model="password" type="password" autocomplete="current-password" placeholder="Mật khẩu" required />
         <button type="submit">Đăng nhập</button>
       </form>
     </div>
@@ -93,7 +112,6 @@ select {
   margin: 10px 0;
   padding: 8px;
 }
-
 input {
   display: block;
   width: 100%;
@@ -110,13 +128,13 @@ p {
   cursor: pointer;
   color: blue;
 }
-.close-btn{
-    position: absolute;
-    border: none;
-    outline: none;
-    width: 10%;
-    left: 380px;
-    top: 10px;
-    background: #00b147;
+.close-btn {
+  position: absolute;
+  border: none;
+  outline: none;
+  width: 10%;
+  left: 380px;
+  top: 10px;
+  background: #00b147;
 }
 </style>

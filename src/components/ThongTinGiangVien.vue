@@ -7,20 +7,18 @@
     <div v-if="selectedTeacher" class="info">
       <img
         class="avatar"
-        :src="selectedTeacher.avatarUrl"
-        :alt="'Ảnh của ' + selectedTeacher.hoTen"
+        :src="selectedTeacher.avatarUrl || '/default-avatar.png'"
+        :alt="'Ảnh của ' + (selectedTeacher.name || 'giảng viên')"
       />
 
       <div class="details">
         <ul>
           <li>
-            {{ selectedTeacher.hocVi }}: {{ selectedTeacher.hoTen }}<br />
-            <strong>Chức vụ:</strong> {{ selectedTeacher.chucVu }}<br />
-            <strong>Email:</strong> {{ selectedTeacher.email }}<br />
-            <strong>Phòng:</strong> {{ selectedTeacher.phongLamViec }}<br />
-            <strong>Tiểu sử:</strong> {{ selectedTeacher.tieuSu }}<br />
-            <strong>Giảng dạy:</strong> {{ selectedTeacher.linhVucGiangDay }}<br />
-            <strong>Thành tích:</strong> {{ selectedTeacher.thanhTich }}<br />
+            <strong>Mã số GV:</strong> {{ selectedTeacher.msgv || 'Đang cập nhật' }}<br />
+            <strong>Họ tên:</strong> {{ selectedTeacher.name || 'Đang cập nhật' }}<br />
+            <strong>Email:</strong> {{ selectedTeacher.email || 'Đang cập nhật' }}<br />
+            <strong>Chức vụ:</strong> {{ selectedTeacher.role || 'Đang cập nhật' }}<br />
+            <strong>Ngày sinh:</strong> {{ selectedTeacher.birthday || 'Đang cập nhật' }}<br />
           </li>
         </ul>
       </div>
@@ -35,21 +33,32 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import supabase from '@/supabase'  // import supabase client
 
-const route = useRoute();
-const teacherData = ref([]);
-const selectedTeacher = ref(null);
+const route = useRoute()
+const selectedTeacher = ref(null)
 
 onMounted(async () => {
-  const res = await fetch('/data/DSGV.json');
-  teacherData.value = await res.json();
-  selectedTeacher.value = teacherData.value.find(
-    (t) => t.id === Number(route.params.id)
-  );
-});
+  const id = Number(route.params.id)
+  if (!id) return
+
+  const { data, error } = await supabase
+    .from('teachers')             // tên bảng của bạn
+    .select('*')
+    .eq('id', id)
+    .single()                    // lấy 1 bản ghi duy nhất
+
+  if (error) {
+    console.error('Lỗi khi tải dữ liệu giảng viên:', error)
+    selectedTeacher.value = null
+  } else {
+    selectedTeacher.value = data
+  }
+})
 </script>
+
 
 <style scoped>
 .can-bo-card {

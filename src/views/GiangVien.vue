@@ -45,7 +45,7 @@ const uploadDocument = () => {
     <ul>
       <li v-for="doc in documents" :key="doc.name" class="doc-item">
         <span>{{ doc.name }}</span>
-        <a :href="doc.url" download target="_blank" class="download-btn">Tải xuống</a>
+        <div v-if="doc.name"><a :href="doc.url" download target="_blank" class="download-btn">Tải xuống</a></div>
       </li>
     </ul>
   </div>

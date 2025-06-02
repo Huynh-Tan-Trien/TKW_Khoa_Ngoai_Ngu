@@ -1,5 +1,38 @@
 <template>
   <div>
+    <!-- Bìa Đồ Án chia 2 phần -->
+<div class="project-cover py-5 px-3 bg-light border mb-4"> 
+  <div class="row">
+    <!-- Phần Left -->
+<div class="col-md-6 text-center">
+  <h6 class="text-uppercase fw-bold mb-1">ỦY BAN NHÂN DÂN</h6>
+  <h6 class="text-uppercase fw-bold mb-1">SỞ GIÁO DỤC VÀ ĐÀO TẠO</h6>
+  <h6 class="mb-1 fw-semibold">TRƯỜNG CAO ĐẲNG KINH TẾ THÀNH PHỐ HỒ CHÍ MINH</h6>
+  <h6 class="mb-1 fw-semibold text-decoration-underline fs-5" style="padding-left: 215px;">ĐỒ ÁN THIẾT KẾ WEB NÂNG CAO</h6>
+</div>
+
+
+
+    <!-- Phần Right -->
+    <div class="col-md-6 text-center">
+      <p class="mb-1 fw-bold">GIÁO VIÊN HƯỚNG DẪN:</p>
+      <p class="mb-1 fst-italic">Phạm Đằng Phương</p>
+      <p class="mb-1 fw-bold">SINH VIÊN THỰC HIỆN:</p>
+      <p class="mb-1 fst-italic">Huỳnh Tuấn Phát - Nguyễn Tuấn Kiệt</p>
+      <p class="mb-1 fst-italic">Nguyễn Phước Thảo Hương - Huỳnh Tấn Triển</p>
+      <p class="mb-0">NHÓM 1</p>
+    </div>
+
+   
+    <div class="col-md-12 text-center">
+
+      <h6 class="text-uppercase fw-bold fs-3">KHOA NGOẠI NGỮ</h6> 
+      <h6 class="text-uppercase">TRƯỜNG CAO ĐẲNG KINH TẾ TP.HCM</h6>
+    </div>
+  </div>
+</div>
+
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2 sticky-top">
       <div class="container">
@@ -12,7 +45,7 @@
           ☰
         </button>
         <!-- Menu items (Desktop only) -->
-        <ul class="navbar-nav mx-auto d-none d-lg-flex gap-4">
+        <ul v-if="isUserLoaded" class="navbar-nav mx-auto d-none d-lg-flex gap-4">
           <li v-for="(item, index) in filteredNavItems" :key="index"
             class="nav-item dropdown"
             @mouseenter="showDropdown(index)"
@@ -47,13 +80,29 @@
           <input class="form-control" placeholder="Tìm kiếm..." />
           <button class="btn btn-success">🔍</button>
           <Sign v-if="ShowSign" @close="ShowSign = false" />
-          <div>
-            <div @click="logout()" v-if="userStore.isLoggedIn">
-              <button>Đăng xuất</button>
+
+          <!-- Đã đăng nhập -->
+          <div v-if="userStore.isLoggedIn" class="position-relative user-dropdown">
+            <div
+              class="btn btn-outline-primary d-flex align-items-center gap-2"
+              @click="toggleUserDropdown"
+            >
+            👤 {{ userStore.name }} ({{ userStore.role }})
             </div>
-            <div v-else>
-              <button @click="ShowSign = true" class="btn btn-success">👤</button>
+            
+            <!-- Dropdown hiển thị khi click -->
+            <div
+              v-if="showUserDropdown"
+              class="dropdown-menu show position-absolute end-0 mt-2 p-2 shadow-sm"
+            >
+              <button class="btn btn-danger btn-sm w-100" @click="logout()">Đăng xuất</button>
             </div>
+          </div>
+
+
+          <!-- Chưa đăng nhập -->
+          <div v-else>
+            <button @click="ShowSign = true" class="btn btn-success">👤</button>
           </div>
         </div>
       </div>
@@ -65,7 +114,7 @@
         <strong>Menu</strong>
         <button class="btn-close" @click="toggleSidebar"></button>
       </div>
-      <ul class="list-group list-group-flush">
+      <ul v-if="isUserLoaded" class="list-group list-group-flush">
         <li
           v-for="(item, index) in filteredNavItems"
           :key="index"
@@ -114,22 +163,32 @@
 </template>
 
 <script setup>
-import { ref,computed } from 'vue';
+import { ref,computed, onMounted } from 'vue';
 import Sign from './Sign.vue';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import router from '@/router';
+import { fetchUserInfo } from '@/fetchUser.js'
+
 
 const userStore = useUserStore();
 const userRole = computed(() => userStore.role);
 
-
+const isUserLoaded = ref(false)
 const ShowSign = ref(false);
 const activeIndex = ref(0);
 const sidebarOpen = ref(false);
 const dropdownIndex = ref(null);
 
 const route = useRoute();
+
+const showUserDropdown = ref(false);
+
+onMounted(() => {
+  fetchUserInfo()
+  isUserLoaded.value = true
+})
+
 
 const logout=()=>{
   router.push('/');
@@ -171,10 +230,10 @@ const navItems = [
   },
   {
     id:5,
-    title: 'Tài Khoản',
+    title: 'Admin',
     to: '/taikhoan/dangky',
     children: [ 
-      { name: 'Đăng ký tài khoản', to: '/taikhoan/dangky' },
+      { name: 'Đăng ký thông tin', to: '/taikhoan/dangky' },
       { name: 'Xóa tài khoản', to: '/taikhoan/xoa' }
     ]
   },
@@ -191,26 +250,42 @@ const navItems = [
   id: 7,
   title: 'Diễn Đàn',
   to: '/forum'  
-}
+  },
+  {
+  id: 8,
+  title: 'Bảng Điểm',
+  to: '/diem'  
+  },
+  {
+  id: 9,
+  title: 'Thêm Điểm SV',
+  to: '/themdiem'  
+  }
 ];
 
 const filteredNavItems = computed(() => {
-  if (userRole.value === 'Sinh viên') {
-    return navItems.filter(item => [1, 2, 4, 6, 7].includes(item.id));
-  } else if (userRole.value === 'Giảng viên') {
-    return navItems.filter(item => [1, 2, 3, 6, 7].includes(item.id));
-  } else if (userRole.value === 'admin') {
-    return navItems.filter(item => [1, 2, 5, 6, 7].includes(item.id));
-  } else {
-    return navItems.filter(item => [1, 2, 6, 7].includes(item.id));
+  switch (userRole.value) {
+    case 'Sinh viên':
+      return navItems.filter(item => [1, 2, 4, 6, 7, 8].includes(item.id))
+    case 'Giảng viên':
+      return navItems.filter(item => [1, 2, 3, 6, 7, 9].includes(item.id))
+    case 'admin':
+      return navItems.filter(item => [1, 2, 5, 6, 7].includes(item.id))
+    default:
+      return navItems.filter(item => [1, 2, 6, 7].includes(item.id))
   }
-});
+})
+
 
 // Xác định menu nào đang active dựa vào route
 const isActive = (item) => {
   if (!item.to){return false;}
   return route.path === item.to || route.path.startsWith(item.to + '/');
 };
+
+function toggleUserDropdown() {
+  showUserDropdown.value = !showUserDropdown.value;
+}
 
 function toggleSidebar() {
   sidebarOpen.value = !sidebarOpen.value;

@@ -1,6 +1,5 @@
 <template>
     <HeaderWeb/>
-    <BannerSection/>
     <div class="container my-4">
       <div class="card">
         <div class="card-header bg-primary text-white text-center">
@@ -55,7 +54,6 @@
 import { ref } from 'vue';
 import HeaderWeb from '@/components/HeaderWeb.vue';
 import FooterWeb from '@/components/FooterWeb.vue';
-import BannerSection from '@/components/BannerSection.vue';
   
 const toCanBan = [
     { id:6, hoTen: 'Th.S Vũ Hoàng Giang', path: '/DSGV/6' },

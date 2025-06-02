@@ -19,3 +19,12 @@ a,
 .bg-gradient-custom {
   background: linear-gradient(to right, #cceaff, #85e3f8, #2fc9f0); /* Một gradient ba màu */
 }
+
+/* Bootstrap override để đảm bảo padding không đẩy header/footer ra xa */
+.container,
+.container-fluid {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}

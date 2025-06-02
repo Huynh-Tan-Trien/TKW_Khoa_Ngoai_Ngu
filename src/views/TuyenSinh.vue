@@ -168,4 +168,97 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+.tuyensinh-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 40px 20px;
+  background: linear-gradient(to bottom right, #f0f8ff, #e0f7fa); /* dịu hơn, hướng góc */
+  margin-top: 0; /* Xóa margin trên/dưới nếu header/footer đã có padding */
+  margin-bottom: 0;
+}
+
+.section {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.section h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 24px;
+  color: #005b8f;
+  font-weight: 600;
+}
+
+.section h3 {
+  margin-top: 20px;
+  color: #00695c;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-list li {
+  margin-bottom: 12px;
+  line-height: 1.8;
+}
+
+.sub-list {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+a {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #004999;
+}
+
+@media (max-width: 768px) {
+  .tuyensinh-container {
+    padding: 20px 12px;
+  }
+
+  .section h2 {
+    font-size: 22px;
+  }
+
+  .section h3 {
+    font-size: 18px;
+  }
+
+  .info-list li {
+    font-size: 15px;
+  }
+}
+
+.tuyensinh-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 40px 20px;
+  background: linear-gradient(to bottom right, #f0f8ff, #e0f7fa);
+  margin-top: 0;
+  margin-bottom: 0;
+
+  /* Thêm các dòng sau */
+  max-width: 960px;        /* hoặc 1140px nếu muốn rộng hơn */
+  margin-left: auto;
+  margin-right: auto;
+}
+
 </style>

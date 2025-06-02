@@ -81,20 +81,44 @@
   const searchQuery = ref('')
   const roleFilter = ref('')
   
-  const fetchUsers = async () => {
-    const { data, error } = await supabase.from('User').select('*')
-    if (error) console.error(error)
-    else users.value = data
-  }
+const fetchUsers = async () => {
+  const [studentsRes, teachersRes] = await Promise.all([
+    supabase.from('students').select('*'),
+    supabase.from('teachers').select('*')
+  ])
+
+  if (studentsRes.error) console.error(studentsRes.error)
+  if (teachersRes.error) console.error(teachersRes.error)
+
+  users.value = [
+    ...(studentsRes.data || []),
+    ...(teachersRes.data || [])
+  ]
+}
+
   
-  const deleteUser = async (id) => {
-    const confirmDelete = confirm('Bạn có chắc muốn xóa tài khoản này?')
-    if (!confirmDelete) return
-  
-    const { error } = await supabase.from('User').delete().eq('id', id)
-    if (error) console.error(error)
-    else fetchUsers()
+const deleteUser = async (id) => {
+  const user = users.value.find(u => u.id === id)
+  if (!user) return
+
+  const confirmDelete = confirm('Bạn có chắc muốn xóa tài khoản này?')
+  if (!confirmDelete) return
+
+  let table = ''
+  if (user.role === 'Sinh viên') {
+    table = 'students'
+  } else if (user.role === 'Giảng viên') {
+    table = 'teachers'
+  } else {
+    alert('Không thể xóa tài khoản này!')
+    return
   }
+
+  const { error } = await supabase.from(table).delete().eq('id', id)
+  if (error) console.error(error)
+  else fetchUsers()
+}
+
   
   const editUser = (user) => {
     editingId.value = user.id
@@ -106,20 +130,31 @@
     editForm.value = { name: '', email: '', role: '' }
   }
   
-  const updateUser = async (id) => {
-    const { error } = await supabase.from('User').update({
-      name: editForm.value.name,
-      email: editForm.value.email,
-      role: editForm.value.role
-    }).eq('id', id)
-  
-    if (error) {
-      console.error(error)
-    } else {
-      editingId.value = null
-      fetchUsers()
-    }
+const updateUser = async (id) => {
+  let table = ''
+  if (editForm.value.role === 'Sinh viên') {
+    table = 'students'
+  } else if (editForm.value.role === 'Giảng viên') {
+    table = 'teachers'
+  } else {
+    alert('Không thể cập nhật tài khoản này!')
+    return
   }
+
+  const { error } = await supabase.from(table).update({
+    name: editForm.value.name,
+    email: editForm.value.email,
+    role: editForm.value.role
+  }).eq('id', id)
+
+  if (error) {
+    console.error(error)
+  } else {
+    editingId.value = null
+    fetchUsers()
+  }
+}
+
   
     const filteredUsers = computed(() => {
         return users.value

@@ -14,6 +14,8 @@ import ThongTinGiangVien from '@/components/ThongTinGiangVien.vue';
 import DangKy from '@/views/DangKy.vue';
 import Delete from '@/views/Delete.vue';
 import Forum from '@/views/Forum.vue';
+import Bangdiem_Bieudo from '@/views/Bangdiem_Bieudo.vue';
+import ThemDiemSV from '@/views/ThemDiemSV.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -29,6 +31,8 @@ const routes = [
   { path: '/taikhoan/dangky', name:'dangky', component: DangKy},
   { path: '/taikhoan/xoa', name:'Xoa', component: Delete},
   { path: '/forum', name: 'Forum', component: Forum },
+  { path: '/diem', name: 'Bangdiem', component: Bangdiem_Bieudo },
+  { path: '/themdiem', name: 'Themdiem', component: ThemDiemSV },
 
 
   { path: '/DSGV/', name: 'DSGVlist', component: ThongTinGiangVien},

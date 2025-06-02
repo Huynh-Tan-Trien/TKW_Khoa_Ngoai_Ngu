@@ -30,9 +30,9 @@
 import { ref, onMounted } from 'vue'
 
 const images = ref([
-  "https://scontent.fsgn5-12.fna.fbcdn.net/v/t39.30808-6/480659129_1097684525496039_7871199408909214261_n.jpg?...",
-  "https://scontent.fsgn5-5.fna.fbcdn.net/v/t1.6435-9/151215323_2874522392782704_6958068792392869363_n.jpg?...",
-  "https://scontent.fsgn5-9.fna.fbcdn.net/v/t39.30808-6/483838142_1057016783137692_3816593369255638870_n.jpg?..."
+  "https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-6/501302284_1172702101327614_8626857202518232125_n.jpg?stp=dst-jpg_s851x315_tt6&_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_ohc=2utVoQadaY4Q7kNvwGBLAzb&_nc_oc=AdmUkVITrldB8DsBtOHW2iDty07pYkxdNV6yuLweeO1QTKMsiYMZ8LOh0mV5LQ5gxLA&_nc_zt=23&_nc_ht=scontent.fsgn2-5.fna&_nc_gid=F7KRk22EMJf4LkZPHCw0UQ&oh=00_AfLOhC3QKKVZa4-5k92W-YsmLrGLsolDkChemUnh2krfEQ&oe=6841B269",
+  "https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/495086524_1158129249451566_7894997203560858297_n.jpg?stp=dst-jpg_s851x315_tt6&_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=0wZAwAjT064Q7kNvwFsKE-_&_nc_oc=Adm8uUIicaCVoYmFzzHQkcJuaSK56Gg4e4Sekw27lOU1Ccbn8wZhs2LTIG3tfxjM6Sc&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=F7KRk22EMJf4LkZPHCw0UQ&oh=00_AfJvBk6EVmbXJaxnTpMXQJztKYH08-KQVUwcsDOP6cSqHQ&oe=6841CD19",
+  "https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-6/501272023_1172605764670581_3533172925340163977_n.jpg?stp=dst-jpg_s720x720_tt6&_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_ohc=LnlqaCOp310Q7kNvwFfbvaP&_nc_oc=AdlQd4cI_6js4btw5hvcjl9Jphet1lm6xm-UC-H_TZIMaMhXoucNYaFexeQv_Q1u3Pc&_nc_zt=23&_nc_ht=scontent.fsgn2-5.fna&_nc_gid=e7_vCfm7gT0ng_OUIDA__g&oh=00_AfLwW9to7RySX8QQPSK1pM8mlHO69pufLBOCLbpzvZ4N1Q&oe=6841D62C"
 ])
 
 const currentIndex = ref(0)

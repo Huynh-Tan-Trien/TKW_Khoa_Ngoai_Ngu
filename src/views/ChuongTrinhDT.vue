@@ -202,4 +202,26 @@ h2{
         width: 90%;
     }
 }
+
+.tuyensinh-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    margin-top: 3.5rem;
+    margin-bottom: 3.5rem;
+
+    /* Thêm các dòng sau */
+    max-width: 960px;       /* hoặc 1140px nếu bạn muốn rộng hơn */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 1200px) {
+    .tuyensinh-container {
+        max-width: 1140px;
+    }
+}
+
 </style>
