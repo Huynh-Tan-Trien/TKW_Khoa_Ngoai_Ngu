@@ -269,7 +269,7 @@ const filteredNavItems = computed(() => {
       return navItems.filter(item => [1, 2, 4, 6, 7, 8].includes(item.id))
     case 'Giảng viên':
       return navItems.filter(item => [1, 2, 3, 6, 7, 9].includes(item.id))
-    case 'admin':
+    case 'Admin':
       return navItems.filter(item => [1, 2, 5, 6, 7].includes(item.id))
     default:
       return navItems.filter(item => [1, 2, 6, 7].includes(item.id))

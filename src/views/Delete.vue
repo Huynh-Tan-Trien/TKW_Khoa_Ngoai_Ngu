@@ -81,10 +81,10 @@
   const searchQuery = ref('')
   const roleFilter = ref('')
   
-const fetchUsers = async () => {
+  const fetchUsers = async () => {
   const [studentsRes, teachersRes] = await Promise.all([
-    supabase.from('students').select('*'),
-    supabase.from('teachers').select('*')
+    supabase.from('students').select('*').eq('status', true),
+    supabase.from('teachers').select('*').eq('status', true)
   ])
 
   if (studentsRes.error) console.error(studentsRes.error)
@@ -114,9 +114,16 @@ const deleteUser = async (id) => {
     return
   }
 
-  const { error } = await supabase.from(table).delete().eq('id', id)
-  if (error) console.error(error)
-  else fetchUsers()
+  const { error } = await supabase
+    .from(table)
+    .update({ status: false })
+    .eq('id', id)
+
+  if (error) {
+    console.error(error)
+  } else {
+    fetchUsers()
+  }
 }
 
   
@@ -138,7 +145,7 @@ const updateUser = async (id) => {
     table = 'teachers'
   } else {
     alert('Không thể cập nhật tài khoản này!')
-    return
+    return 
   }
 
   const { error } = await supabase.from(table).update({
